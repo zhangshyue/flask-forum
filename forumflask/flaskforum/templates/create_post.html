@@ -1,0 +1,36 @@
+{%extends "layout.html"%}
+{%block content%}
+<form class='p-5' method="POST" action="">
+  {{ form.hidden_tag() }}
+	<h3>{{action}} Post</h3>
+  <div class="form-group">
+    {{form.title.label(for="form-control-label")}}
+    {%if form.title.errors%}
+      {{form.title(class = "form-control form-control-lg is-invalid")}}
+      <div class = "invalid-feedback">
+        {%for error in form.title.errors%}
+          <span>{{error}}</span>
+        {%endfor%}
+      </div>
+    {%else%}
+      {{form.title(class = "form-control form-control-lg")}}
+    {%endif%}
+  </div>
+  <div class="form-group">
+	    {{ form.content.label(class="form-control-label") }}
+	    {% if form.content.errors %}
+	        {{ form.content(class="form-control form-control-lg is-invalid") }}
+	        <div class="invalid-feedback">
+	            {% for error in form.content.errors %}
+	                <span>{{ error }}</span>
+	            {% endfor %}
+	        </div>
+	    {% else %}
+	        {{ form.content(class="form-control form-control-lg") }}
+	    {% endif %}
+	</div>
+  <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+</form>
+{%endblock%}

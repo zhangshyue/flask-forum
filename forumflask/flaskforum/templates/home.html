@@ -1,0 +1,137 @@
+{%extends "layout.html"%}
+{%block content%}
+  {%for post in posts.items%}
+    <article class="border rounded m-5 p-2">
+      <h3>{{post.title}}</h3>
+      <div>
+        <img src="C:\Users\shiyue zhang\Desktop\web\forumflask\flaskforum\static\profiles\default.jpg" class="float-left rounded-circle" style="width: 40px; height: 40px;">
+        <h6 class="text-muted p-2" style="height: 40px;">{{post.author.username}}</h6>
+        <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+      <p style = "white-space: pre-line;">
+        {{post.content}}
+      </p>
+      </div>
+      {% if current_user.is_authenticated%}
+      <div>
+        <div class='row ml-2'>
+          {%set count = namespace(a=0)%}
+          {%set v = namespace(a=0)%}
+            {%for vote in votes%}
+            {%if vote.post_id == post.id and vote.user_id == current_user.id%}
+              {%if vote.action==1%}
+              {%set v.a = 1%}
+              {%endif%}
+              {%if vote.action==-1%}
+              {%set v.a = -1%}
+              {%endif%}
+            {%endif%}
+          </form>
+              {%if vote.post_id == post.id%}
+                {%if vote.action == 1%}
+              {%set count.a = count.a + 1%}
+                {%else%}
+                {%set count.a = count.a - 1%}
+                {%endif%}
+              {%endif%}
+            {%endfor%}
+            {%if v.a == 1%}
+            <form action="{{ url_for('votes.upvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <input class="btn btn-light btn-outline-secondary" type="submit" value="Upvote">
+              </form>
+                <form action="{{ url_for('votes.downvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <input class="btn btn-dark btn-primary" type="submit" value="Downvote">
+              </form>
+              {%endif%}
+            {%if v.a==-1%}
+                <form action="{{ url_for('votes.upvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <input class="btn btn-light btn-primary" type="submit" value="Upvote">
+              </form>
+                <form action="{{ url_for('votes.downvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <input class="btn btn-dark btn-outline-secondary" type="submit" value="Downvote"></form>
+            {%endif%}
+            {%if v.a==0%}
+                <form action="{{ url_for('votes.upvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <input class="btn btn-light btn-primary" type="submit" value="Upvote">
+              </form>
+                <form action="{{ url_for('votes.downvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <input class="btn btn-dark btn-primary" type="submit" value="Downvote">
+              </form>
+            {%endif%}
+          <h6 class='m-2'>The number of upvote is 
+          {{count.a}}
+          </h6>
+        </div>
+        <div class='mt-2'>
+          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample+{{post.id}}" aria-expanded="false" aria-controls="collapseExample+{{post.id}}">
+            See All Replies
+          </button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#replyModal{{post.id}}">Reply</button>
+        </div>
+          
+          <div class="collapse" id="collapseExample+{{post.id}}">
+            {%for reply in replies%}
+              {%if reply.post_id == post.id%}
+              <div>
+                <div class="dropdown-divider"></div>
+                <div >
+                  <img src="C:\Users\shiyue zhang\Desktop\web\forumflask\flaskforum\static\profiles\default.jpg" class="rounded-circle float-left" style="width: 20px; height: 20px;">
+                  <h6 class="text-muted" style="height: 20px;">{{reply.user.username}}</h6>
+                  <small class="text-muted text-right">{{ reply.date_posted.strftime('%Y-%m-%d') }}</small>
+                </div>
+                <p class = "pt-0" style = "white-space: pre-line;">
+                  {{reply.content}}
+                </p>
+              </div>
+              {%endif%}
+            {%endfor%}
+          </div>
+
+          <div class="modal fade" id="replyModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel{{post.id}}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Reply</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form class='p-5' method="POST" action="{{ url_for('replies.reply_post',user_id = current_user.id, post_id=post.id) }}" >
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {% if form.content.errors %}
+                            {{ form.content(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.content.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.content(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                              {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+          {%endif%}
+    </article>
+  {%endfor%}
+  {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if posts.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+  {% endblock content %}
