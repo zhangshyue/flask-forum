@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, current_app, url_for, flash, redirect, request, Blueprint
 from flask_login import login_required, login_user, current_user, logout_user
 from flaskforum.users.forms import LoginForm, RegisterForm, UpdateAccountForm
 from flaskforum.replies.forms import ReplyForm
@@ -21,7 +21,7 @@ def account():
 		current_user.username = form.username.data
 		current_user.email = form.email.data
 		db.session.commit()
-		flash('Your account has been updated!', 'success')
+		flash('Your account has been updated!'+current_user.image_file, 'success')
 		return redirect(url_for('users.account'))
 	elif request.method == 'GET':
 		form.username.data = current_user.username
@@ -99,7 +99,7 @@ def save_picture(form_picture):
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(current_app.root_path, 'static/profiles', picture_fn)
 
-    output_size = (50, 50)
+    output_size = (125, 125)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
