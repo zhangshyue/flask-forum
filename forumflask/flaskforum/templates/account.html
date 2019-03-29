@@ -1,18 +1,53 @@
 {%extends "layout.html"%}
 {%block content%}
-	<form class='p-5'>
-    <div>
-        <img src="C:\Users\shiyue zhang\Desktop\web\forumflask\flaskforum\static\profiles\default.jpg" class="float-left rounded-circle" style="width: 40px; height: 40px;">
-        <h3 class="p-2" style="height: 40px;">{{current_user.username}}</h3>
-      </div>
-	  <div class="form-group">
-	    <label for="exampleInputPassword1">Username</label>
-	    <input type="text" class="form-control">
+
+	<form class='p-5'  method="POST" action="">
+	  {{ form.hidden_tag() }}
+	  <div class='row'>
+	  	<img class="rounded-circle account-img" src="{{ image_file }}">
+		 <h1 class="border-bottom mb-4 p-5">{{ current_user.username }}</h1>
 	  </div>
 	  <div class="form-group">
-	    <label for="exampleInputEmail1">Email address</label>
-	    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+	    {{form.username.label(class="form-control-label")}}
+	    {%if form.username.errors%}
+	      {{form.username(class = "form-control form-control-lg is-invalid")}}
+	      <div class = "invalid-feedback">
+	        {%for error in form.username.errors%}
+	          <span>{{error}}</span>
+	        {%endfor%}
+	      </div>
+	    {%else%}
+	      {{form.username(class = "form-control form-control-lg")}}
+	    {%endif%}
 	  </div>
-	  <button type="submit" class="btn btn-primary">Submit</button>
+	  <div class="form-group">
+	    {{form.email.label(class="form-control-label")}}
+	    {%if form.email.errors%}
+	      {{form.email(class = "form-control form-control-lg is-invalid")}}
+	      <div class = "invalid-feedback">
+	        {%for error in form.email.errors%}
+	          <span>{{error}}</span>
+	        {%endfor%}
+	      </div>
+	    {%else%}
+	      {{form.email(class = "form-control form-control-lg")}}
+	    {%endif%}
+	  </div>
+	  <div class="form-group">
+	    {{form.picture.label(class="form-control-label")}}
+	    {%if form.picture.errors%}
+	      {{form.picture(class = "form-control form-control-lg is-invalid")}}
+	      <div class = "invalid-feedback">
+	        {%for error in form.picture.errors%}
+	          <span>{{error}}</span>
+	        {%endfor%}
+	      </div>
+	    {%else%}
+	      {{form.picture(class = "form-control form-control-lg")}}
+	    {%endif%}
+	  </div>
+	  <div class="border-top pt-3">
+	    {{ form.submit(class="btn btn-outline-info") }}
+	  </div>
 	</form>
 {% endblock content %}
