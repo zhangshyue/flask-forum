@@ -18,4 +18,4 @@ flask_login\
 ```
 python3 run.py
 ```
-
+![flaskforum](https://github.com/zhangshyue/flask-forum/blob/master/img/home.png)
