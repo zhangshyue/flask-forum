@@ -5,9 +5,9 @@ from flaskforum.models import User, Post, Vote
 
 votes = Blueprint('votes', __name__)
 
-@votes.route("/<int:user_id>/<int:post_id>/upvote", methods = ['POST'])
+@votes.route("/<int:user_id>/<int:post_id>/<int:page>/upvote", methods = ['POST'])
 @login_required
-def upvote(user_id, post_id):
+def upvote(user_id, post_id,page):
 	vote = Vote.query.filter_by(user_id = user_id, post_id = post_id, action = 1).first()
 	down = Vote.query.filter_by(user_id = user_id, post_id = post_id, action = -1).first()
 	if vote:
@@ -21,11 +21,11 @@ def upvote(user_id, post_id):
 		db.session.add(vote)
 		db.session.commit()
 		flash('You have successfully voted!', 'success')
-	return redirect(url_for('main.home'))
+	return redirect(url_for('main.home', page=page))
 
-@votes.route("/<int:user_id>/<int:post_id>/downvote", methods = ['POST'])
+@votes.route("/<int:user_id>/<int:post_id>/<int:page>/downvote", methods = ['POST'])
 @login_required
-def downvote(user_id, post_id):
+def downvote(user_id, post_id, page):
 	vote = Vote.query.filter_by(user_id = user_id, post_id = post_id, action = -1).first()
 	up = Vote.query.filter_by(user_id = user_id, post_id = post_id, action = 1).first()
 	if vote:
@@ -39,4 +39,4 @@ def downvote(user_id, post_id):
 		db.session.add(vote)
 		db.session.commit()
 		flash('You have successfully voted!', 'success')
-	return redirect(url_for('main.home'))
+	return redirect(url_for('main.home', page=page))

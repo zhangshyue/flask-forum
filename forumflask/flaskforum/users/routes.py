@@ -90,7 +90,7 @@ def my_likes():
 	form = ReplyForm()
 	replies = Reply.query.all()
 	return render_template('my_posts.html', title = 'My Likes', posts = posts, 
-		type = 'like',votes = votes, form = form, replies = replies)
+		type = 'like',votes = votes, form = form, replies = replies, page = page)
 
 
 def save_picture(form_picture):

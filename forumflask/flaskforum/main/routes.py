@@ -14,16 +14,6 @@ def home():
 	form = ReplyForm()
 	replies = Reply.query.all()
 	return render_template('home.html', title = 'Home', 
-		posts = posts, votes = votes, form = form, replies = replies)
+		posts = posts, votes = votes, form = form, replies = replies, page = page)
 
 
-# @main.route("/home")
-# @login_required
-# def home_login():
-# 	page = request.args.get('page', 1, type=int)
-# 	posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
-# 	votes = Vote.query.all()
-# 	form = ReplyForm()
-# 	replies = Reply.query.all()
-# 	return render_template('home.html', title = 'Home', 
-# 		posts = posts, votes = votes, form = form, replies = replies)

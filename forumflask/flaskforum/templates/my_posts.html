@@ -55,25 +55,25 @@
               {%endif%}
             {%endfor%}
             {%if v.a == 1%}
-            <form action="{{ url_for('votes.upvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+            <form action="{{ url_for('votes.upvote',user_id = current_user.id, post_id=post.id, page=page) }}" method="POST">
                 <input class="btn btn-light btn-outline-secondary" type="submit" value="Upvote">
               </form>
-                <form action="{{ url_for('votes.downvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <form action="{{ url_for('votes.downvote',user_id = current_user.id, post_id=post.id, page=page) }}" method="POST">
                 <input class="btn btn-dark btn-primary" type="submit" value="Downvote">
               </form>
               {%endif%}
             {%if v.a==-1%}
-                <form action="{{ url_for('votes.upvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <form action="{{ url_for('votes.upvote',user_id = current_user.id, post_id=post.id, page=page) }}" method="POST">
                 <input class="btn btn-light btn-primary" type="submit" value="Upvote">
               </form>
-                <form action="{{ url_for('votes.downvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <form action="{{ url_for('votes.downvote',user_id = current_user.id, post_id=post.id, page=page) }}" method="POST">
                 <input class="btn btn-dark btn-outline-secondary" type="submit" value="Downvote"></form>
             {%endif%}
             {%if v.a==0%}
-                <form action="{{ url_for('votes.upvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <form action="{{ url_for('votes.upvote',user_id = current_user.id, post_id=post.id, page=page) }}" method="POST">
                 <input class="btn btn-light btn-primary" type="submit" value="Upvote">
               </form>
-                <form action="{{ url_for('votes.downvote',user_id = current_user.id, post_id=post.id) }}" method="POST">
+                <form action="{{ url_for('votes.downvote',user_id = current_user.id, post_id=post.id, page=page) }}" method="POST">
                 <input class="btn btn-dark btn-primary" type="submit" value="Downvote">
               </form>
             {%endif%}
@@ -94,7 +94,7 @@
               <div>
                 <div class="dropdown-divider"></div>
                 <div >
-                  <img src="C:\Users\shiyue zhang\Desktop\web\forumflask\flaskforum\static\profiles\default.jpg" class="rounded-circle float-left" style="width: 20px; height: 20px;">
+                  <img src="{{ url_for('static', filename='profiles/' + reply.user.image_file) }}" class="rounded-circle float-left" style="width: 20px; height: 20px;">
                   <h6 class="text-muted" style="height: 20px;">{{reply.user.username}}</h6>
                   <small class="text-muted text-right">{{ reply.date_posted.strftime('%Y-%m-%d') }}</small>
                 </div>
@@ -116,7 +116,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form class='p-5' method="POST" action="{{ url_for('replies.reply_post',user_id = current_user.id, post_id=post.id) }}" >
+                  <form class='p-5' method="POST" action="{{ url_for('replies.reply_post',user_id = current_user.id, post_id=post.id, page = page) }}" >
                     {{ form.hidden_tag() }}
                     <div class="form-group">
                         {% if form.content.errors %}

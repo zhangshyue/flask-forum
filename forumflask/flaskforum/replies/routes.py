@@ -6,9 +6,9 @@ from flaskforum.replies.forms import ReplyForm
 
 replies = Blueprint('replies', __name__)
 
-@replies.route("/reply/<int:post_id>/<int:user_id>", methods = ['POST'])
+@replies.route("/reply/<int:post_id>/<int:user_id>/<int:page>", methods = ['POST'])
 @login_required
-def reply_post(post_id, user_id):
+def reply_post(post_id, user_id, page):
 	#reply = Reply.query.filter_by(user_id = user_id, post_id = post_id).first()
 	form = ReplyForm()
 	if form.validate_on_submit():
@@ -17,4 +17,4 @@ def reply_post(post_id, user_id):
 		db.session.add(reply)
 		db.session.commit()
 		flash('You have successfully replied!', 'success')
-	return redirect(url_for('main.home'))
+	return redirect(url_for('main.home', page = page))
